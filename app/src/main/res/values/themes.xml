@@ -1,0 +1,13 @@
+
+
+<resources>
+<!-- Base application theme. -->
+<style name="Theme.ArabaKayit" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Customize your theme here. -->
+</style>
+
+<!-- Add these two style definitions -->
+<style name="Theme.ArabaKayit.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+<style name="Theme.ArabaKayit.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>
