@@ -33,12 +33,19 @@ tools:context=".view.MainActivity">
             android:layout_height="wrap_content"
             android:text="Veritabanına Kaydet" />
 
-        <!-- Araba listesini göstermek için buraya bir RecyclerView eklenebilir -->
-        <!-- <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp"/> -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kayıtlı Arabalar"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp" />
+
+        <ListView
+            android:id="@+id/listViewArabalar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp" />
 
     </LinearLayout>
 

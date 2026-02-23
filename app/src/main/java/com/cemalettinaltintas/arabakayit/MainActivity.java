@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -18,10 +20,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;
     EditText editMarka, editModel;
     Button btnKaydet;
+    ListView listView;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> arabaListesi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             String model = editModel.getText().toString();
             boolean eklendi = dbHelper.veriEkle(marka, model);
             if (eklendi) {
+                listeyiYenile();
                 Toast.makeText(this, "Veri başarıyla eklendi", Toast.LENGTH_SHORT).show();
                 editMarka.setText("");
                 editModel.setText("");
@@ -56,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
+        listView = findViewById(R.id.listViewArabalar);
+
+
+
+    }
+    // Listeyi veritabanından çekip ekrana basan yardımcı metod
+    private void listeyiYenile() {
+        arabaListesi = dbHelper.tumArabalariGetir();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arabaListesi);
+        listView.setAdapter(adapter);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

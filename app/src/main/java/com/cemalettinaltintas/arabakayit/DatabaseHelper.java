@@ -2,10 +2,13 @@ package com.cemalettinaltintas.arabakayit;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "ArabaKayit.db";
@@ -15,11 +18,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    /*
-        public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-            super(context, name, null, version);
-        }
-    */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE arabalar (id INTEGER PRIMARY KEY AUTOINCREMENT, marka TEXT, model TEXT)");
@@ -39,5 +37,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long sonuc = db.insert("arabalar", null, values);
         return sonuc != -1; // -1 değilse kayıt başarılıdır
     }
+    // DatabaseHelper sınıfının içine ekle:
+    public ArrayList<String> tumArabalariGetir() {
+        ArrayList<String> liste = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        // Tüm tabloyu oku
+        Cursor cursor = db.rawQuery("SELECT * FROM arabalar ORDER BY id DESC", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                // Sütun indislerine göre veriyi al (0:id, 1:marka, 2:model)
+                String satir = cursor.getString(1) + " " + cursor.getString(2);
+                liste.add(satir);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return liste;
+    }
 }
