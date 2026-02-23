@@ -67,12 +67,13 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.listViewArabalar);
 
 
-
+        listeyiYenile();
     }
     // Listeyi veritabanından çekip ekrana basan yardımcı metod
     private void listeyiYenile() {
         arabaListesi = dbHelper.tumArabalariGetir();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arabaListesi);
+        //adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arabaListesi);
+        ArabaAdapter adapter = new ArabaAdapter(this, arabaListesi, dbHelper);
         listView.setAdapter(adapter);
     }
     @Override

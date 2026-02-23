@@ -55,4 +55,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return liste;
     }
+
+    public void veriSil(String markaModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Marka ve modeli boşlukla birleştirdiğimiz için parçalayıp siliyoruz
+        // Not: Gerçek projelerde bu işlem ID üzerinden yapılır.
+        String[] parcalar = markaModel.split(" ");
+        db.delete("arabalar", "marka=? AND model=?", new String[]{parcalar[0], parcalar[1]});
+        db.close();
+    }
 }
