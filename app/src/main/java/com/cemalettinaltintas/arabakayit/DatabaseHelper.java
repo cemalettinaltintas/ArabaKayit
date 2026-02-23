@@ -74,4 +74,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update("arabalar", values, "id=?", new String[]{String.valueOf(id)});
         db.close();
     }
+
+    public ArrayList<Araba> arabaAra(String kelime) {
+        ArrayList<Araba> liste = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // LIKE kullanarak arama yapıyoruz
+        // ? yerine kelime gelecek, % işaretleri "herhangi bir yerinde geçsin" demek
+        Cursor cursor = db.rawQuery("SELECT * FROM arabalar WHERE marka LIKE ?", new String[]{"%" + kelime + "%"});
+
+        if (cursor.moveToFirst()) {
+            do {
+                liste.add(new Araba(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return liste;
+    }
 }

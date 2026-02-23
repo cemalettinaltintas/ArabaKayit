@@ -4,8 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/main"
 android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".view.MainActivity">
+android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,20 +17,30 @@ tools:context=".view.MainActivity">
         <EditText
             android:id="@+id/editMarka"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="Araba Markası (Örn: Peugeot)" />
 
         <EditText
             android:id="@+id/editModel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="Model (Örn: 3008)" />
 
         <Button
             android:id="@+id/btnKaydet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Veritabanına Kaydet" />
+            android:text="Veritabanına Kaydet"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:id="@+id/editArama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Araba ara (Marka)..."
+            android:drawableLeft="@android:drawable/ic_menu_search"
+            android:layout_marginTop="10dp"
+            android:padding="10dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -39,7 +48,8 @@ tools:context=".view.MainActivity">
             android:text="Kayıtlı Arabalar"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="30dp"
+            android:textAlignment="center"/>
 
         <ListView
             android:id="@+id/listViewArabalar"

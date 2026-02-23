@@ -1,6 +1,8 @@
 package com.cemalettinaltintas.arabakayit;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -95,7 +97,33 @@ public class MainActivity extends AppCompatActivity {
             btnKaydet.setText("GÜNCELLE");
         });
 
+        EditText editArama = findViewById(R.id.editArama);
+
+        editArama.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Kullanıcı yazdıkça bu metod çalışır
+                String arananKelime = s.toString();
+                aramaYap(arananKelime);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+
     }
+    // Arama işlemini yürüten yardımcı metod
+    private void aramaYap(String kelime) {
+        arabaListesi = dbHelper.arabaAra(kelime);
+        ArabaAdapter adapter = new ArabaAdapter(this, arabaListesi, dbHelper);
+        listView.setAdapter(adapter);
+    }
+
+
     // Listeyi veritabanından çekip ekrana basan yardımcı metod
     private void listeyiYenile() {
         arabaListesi = dbHelper.tumArabalariGetir();
