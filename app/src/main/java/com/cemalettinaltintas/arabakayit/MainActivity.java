@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     ArrayAdapter<String> adapter;
     ArrayList<Araba> arabaListesi;
-
+    int seciliId = -1; // -1 ise yeni kayıt, -1'den büyükse güncelleme modundayız demektir.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,16 +48,30 @@ public class MainActivity extends AppCompatActivity {
         btnKaydet.setOnClickListener(v -> {
             String marka = editMarka.getText().toString();
             String model = editModel.getText().toString();
-            boolean eklendi = dbHelper.veriEkle(marka, model);
-            if (eklendi) {
-                listeyiYenile();
-                Toast.makeText(this, "Veri başarıyla eklendi", Toast.LENGTH_SHORT).show();
-                editMarka.setText("");
-                editModel.setText("");
+
+            if (marka.isEmpty() || model.isEmpty()) {
+                Toast.makeText(this, "Boş alan bırakmayın", Toast.LENGTH_SHORT).show();
+                return;
             }
-            else {
-                Toast.makeText(this, "Veri ekleme başarısız oldu", Toast.LENGTH_SHORT).show();
+
+            if (seciliId == -1) {
+                // YENİ KAYIT MODU
+                dbHelper.veriEkle(marka, model);
+                Toast.makeText(this, "Eklendi!", Toast.LENGTH_SHORT).show();
+            } else {
+                // GÜNCELLEME MODU
+                dbHelper.veriGuncelle(seciliId, marka, model);
+                Toast.makeText(this, "Güncellendi!", Toast.LENGTH_SHORT).show();
+
+                // İşlem bitince modu sıfırla
+                seciliId = -1;
+                btnKaydet.setText("KAYDET");
             }
+
+            // Arayüzü temizle ve listeyi yenile
+            editMarka.setText("");
+            editModel.setText("");
+            listeyiYenile();
         });
 
 
@@ -68,6 +82,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         listeyiYenile();
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Araba secilenAraba = arabaListesi.get(position);
+
+            // Verileri kutucuklara doldur
+            editMarka.setText(secilenAraba.getMarka());
+            editModel.setText(secilenAraba.getModel());
+
+            // ID'yi hafızaya al ve butonu güncelle
+            seciliId = secilenAraba.getId();
+            btnKaydet.setText("GÜNCELLE");
+        });
+
     }
     // Listeyi veritabanından çekip ekrana basan yardımcı metod
     private void listeyiYenile() {
@@ -75,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
         ArabaAdapter adapter = new ArabaAdapter(this, arabaListesi, dbHelper);
         listView.setAdapter(adapter);
     }
+
+    private void formuTemizle() {
+        editMarka.setText("");
+        editModel.setText("");
+        seciliId = -1; // Güncelleme modundan çık
+        btnKaydet.setText("KAYDET"); // Butonu eski haline döndür
+        Toast.makeText(this, "İşlem iptal edildi", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater=getMenuInflater();
@@ -84,12 +120,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==R.id.menu_listele){
-            Toast.makeText(this, "Tümünü Listele seçildi", Toast.LENGTH_SHORT).show();
+        int id = item.getItemId();
+        if (id == R.id.menu_listele) {
+            listeyiYenile();
+            return true;
+        } else if (id == R.id.menu_iptal) {
+            formuTemizle(); // Yazdığımız metodu çağırdık
+            return true;
         }
-        else if (item.getItemId()==R.id.menu_hakkinda){
-            Toast.makeText(this, "Hakkında seçildi", Toast.LENGTH_SHORT).show();
-        }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 }

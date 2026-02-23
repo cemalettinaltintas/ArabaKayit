@@ -63,4 +63,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete("arabalar", "id=?", new String[]{String.valueOf(id)});
         db.close();
     }
+
+    public void veriGuncelle(int id, String yeniMarka, String yeniModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("marka", yeniMarka);
+        values.put("model", yeniModel);
+
+        // Hangi ID'ye sahip satır güncellenecek?
+        db.update("arabalar", values, "id=?", new String[]{String.valueOf(id)});
+        db.close();
+    }
 }

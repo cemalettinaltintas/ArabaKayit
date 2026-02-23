@@ -10,4 +10,8 @@
     android:id="@+id/menu_hakkinda"
     android:title="Hakkında"
     app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_iptal"
+        android:title="Güncellemeyi İptal Et"
+        app:showAsAction="never" />
 </menu>
