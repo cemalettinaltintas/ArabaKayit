@@ -37,31 +37,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long sonuc = db.insert("arabalar", null, values);
         return sonuc != -1; // -1 değilse kayıt başarılıdır
     }
-    // DatabaseHelper sınıfının içine ekle:
-    public ArrayList<String> tumArabalariGetir() {
-        ArrayList<String> liste = new ArrayList<>();
+    // Listeleme Metodu
+    public ArrayList<Araba> tumArabalariGetir() {
+        ArrayList<Araba> liste = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // Tüm tabloyu oku
-        Cursor cursor = db.rawQuery("SELECT * FROM arabalar ORDER BY id DESC", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM arabalar", null);
 
         if (cursor.moveToFirst()) {
             do {
-                // Sütun indislerine göre veriyi al (0:id, 1:marka, 2:model)
-                String satir = cursor.getString(1) + " " + cursor.getString(2);
-                liste.add(satir);
+                Araba araba = new Araba(
+                        cursor.getInt(0),  // ID
+                        cursor.getString(1), // Marka
+                        cursor.getString(2)  // Model
+                );
+                liste.add(araba);
             } while (cursor.moveToNext());
         }
         cursor.close();
         return liste;
     }
 
-    public void veriSil(String markaModel) {
+    // Silme Metodu (Artık ID ile çalışıyor)
+    public void veriSil(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        // Marka ve modeli boşlukla birleştirdiğimiz için parçalayıp siliyoruz
-        // Not: Gerçek projelerde bu işlem ID üzerinden yapılır.
-        String[] parcalar = markaModel.split(" ");
-        db.delete("arabalar", "marka=? AND model=?", new String[]{parcalar[0], parcalar[1]});
+        db.delete("arabalar", "id=?", new String[]{String.valueOf(id)});
         db.close();
     }
 }

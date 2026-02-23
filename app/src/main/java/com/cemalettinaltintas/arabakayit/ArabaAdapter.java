@@ -7,14 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
-public class ArabaAdapter extends ArrayAdapter<String> {
+public class ArabaAdapter extends ArrayAdapter<Araba> {
     private Context context;
-    private ArrayList<String> list;
+    private ArrayList<Araba> list;
     private DatabaseHelper dbHelper;
 
-    public ArabaAdapter(Context context, ArrayList<String> list, DatabaseHelper db) {
+    public ArabaAdapter(Context context, ArrayList<Araba> list, DatabaseHelper db) {
         super(context, R.layout.list_item, list);
         this.context = context;
         this.list = list;
@@ -30,13 +32,15 @@ public class ArabaAdapter extends ArrayAdapter<String> {
         TextView txtBilgi = convertView.findViewById(R.id.txtArabaBilgi);
         Button btnSil = convertView.findViewById(R.id.btnSil);
 
-        String mevcutAraba = list.get(position);
-        txtBilgi.setText(mevcutAraba);
+        Araba mevcutAraba = list.get(position);
+        txtBilgi.setText(mevcutAraba.getMarka() + " " + mevcutAraba.getModel());
 
         btnSil.setOnClickListener(v -> {
-            dbHelper.veriSil(mevcutAraba); // Veritabanından sil
-            list.remove(position); // Listeden sil
-            notifyDataSetChanged(); // Ekranı güncelle
+            // Nesnenin içindeki gerçek ID'yi gönderiyoruz
+            dbHelper.veriSil(mevcutAraba.getId());
+            list.remove(position);
+            notifyDataSetChanged();
+            Toast.makeText(context, "Kayıt Silindi", Toast.LENGTH_SHORT).show();
         });
 
         return convertView;
